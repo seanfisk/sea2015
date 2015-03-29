@@ -1,0 +1,164 @@
+\documentclass{beamer}
+\usetheme{Boulder}
+%34,139,34
+%\definecolor{bgcolor}{rgb}{34/256,139/256,34/256}
+\setbeamertemplate{blocks}[rounded][shadow=true]
+\setbeamercolor{block title}{fg=white,bg=structure}
+\setbeamercolor{block body}{bg=white}
+\author[Dorota Jarecka]{Dorota Jarecka, Sylwester Arabas, Anna Jaruga}
+\title{TODO}
+\date{2014 April 7\textsuperscript{th}\\UCAR SEA Software Engineering Conference 2014\\Boulder, CO, USA}
+\institute{University of Warsaw}
+
+\usepackage{tikz,tikz-qtree}
+\usepackage[utf8]{inputenc}
+
+\newcommand{\ftitle}[1]{\frametitle{#1\\\hrule}\vspace{-2em}}
+
+\AtBeginSection[]{%
+  \begin{frame}<beamer>
+    \ftitle{talk outline}
+    \only<1>{\tableofcontents}
+    \only<2>{\tableofcontents[currentsection]}
+  \end{frame}
+  \addtocounter{framenumber}{-1}% If you don't want them to affect the slide number
+}
+
+\begin{document}
+  \begin{frame}
+    \maketitle
+  \end{frame}
+
+  \section{Introduction: testing and pytest}
+
+  \begin{frame}
+    \ftitle{software testing}
+    \begin{description}
+      \item[MSc]{theoretical elementary particle physics}
+         \vspace{1em}
+      \uncover<1->{\item[PhD]{computational (F77) atmospheric physics}}
+    \end{description}
+    \vspace{2em}
+    \uncover<2->{
+      {\bf lessons learnt:}
+       \vspace{.5em}
+      \begin{itemize}
+        \uncover<3->{\item{prefer Python/NumPy to F77}}
+          \vspace{.5em}
+	\uncover<4->{\item{my research productivity can be improved!}\\}
+          \vspace{.5em}
+	\uncover<5->{\alert{$\leadsto$ software design does matter!}\\}
+      \end{itemize}
+    }
+  \end{frame}
+
+
+  \frame<-4>[label=tabelka]{
+    \ftitle{software design and researchers' productivity}
+    \begin{center}\large
+      \begin{columns}[b]
+	\begin{column}{.5\textwidth}
+          {\bf users' perspective}
+          \vspace{1em}
+          \begin{itemize}
+            \item<2->{\alert<5>{ease of use}}
+            \item<2->{\alert<6>{robustness}}
+            \item<2->{\alert<7>{result reproducibility}}
+          \end{itemize}
+%          \uncover<3->{
+%	    $~~~\underbrace{~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~}_{\text{users' perspective}}$
+%          }
+	\end{column}
+	\begin{column}{.5\textwidth}
+          {\bf developers' perspective}
+          \begin{itemize}
+            \vspace{2.2em}
+            \item<3->{\alert<8>{extendability}}
+            \item<3->{\alert<9>{maintainability}}
+          \end{itemize}
+%          \uncover<4->{
+%	    $~~~\underbrace{~~~~~~~~~~~~~~~~~~~~~~~~~~}_{\text{developers' perspective}}$
+%          }
+	\end{column}
+      \end{columns}
+    \end{center}
+    \vspace{1em}
+    \uncover<4->{
+      {\Large \color<5->{gray}\alert<4>{researcher = user \& developer}}
+    }
+  }
+
+
+  \begin{frame}[fragile]
+    \begin{center}
+      \ftitle{ease of use (and misuse) - model users' perspective}
+      \begin{itemize}
+        \item{understandable output\\~~~~~\uncover<2->{\alert{$\leadsto$ docs, open data format}}}
+        \item<3->{easy way of providing input and ``setup'' \\  (setups are much more than ``parameters''!)\\~~~~~\uncover<4->{\alert{$\leadsto$ docs, setup/solver separation!}}}
+      \end{itemize}
+      \begin{columns}
+        \begin{column}{.2\textwidth}
+        \end{column}
+        \begin{column}{.8\textwidth}
+          \uncover<4->{
+	    \begin{itemize}\small
+	      \item{setup implementation {\bf\underline{out of tree}}\\
+	      (structuring into libraries helps!)}
+	      \item{as few constraints as possible\\
+                  (e.g. dimensionality, data types $\leadsto$ C++
+                  templates)}
+              \item{library API: flexible and documented}
+	    \end{itemize}
+          }
+        \end{column}
+      \end{columns}
+    \end{center}
+\end{frame}
+
+
+
+  \frame<-5>[label=ext]{
+    \ftitle{extendability - model developers' perspective}
+    \begin{itemize}
+      \item<1->{language with a market of trained personnel\\{\color{gray}(Python, C++, \ldots)}}
+      \vspace{1em}
+      \item<2->{separation of concerns\\{\color{gray}(cloud physicist does cloud physics, etc.)}\\
+	~~~~~\uncover<3->{\alert{$\leadsto$ structuring into libraries helps again!}} 
+      }
+      \vspace{1em}
+      \item<4->{human-readable code\\{\color{gray}(code vs. paper -- they both describe the same algorithm)}\\
+	~~~~~\uncover<5->{\alert{$\leadsto$ dimensional analysis}}\\ 
+	~~~~~\uncover<6->{\alert{$\leadsto$  ``blackboard abstractions''}} 
+      }
+    \end{itemize}
+  }
+
+
+
+  \section{Future plans: (my upcoming 2-year {\bf postdoc @NCAR)}}
+
+  \begin{frame}[fragile]
+    \begin{center}
+      \ftitle{project's methodology}
+      \begin{itemize}
+        \item{writing automated tests during code development\\
+            ~~~~~\uncover<2->{\alert{$\leadsto$ verify behaviors of
+                schemes during the development}}}
+          \vspace{1em}
+         \uncover<3->{
+         \item{using technics of object-oriented  programming\\}
+             ~~~~~\uncover<4->{\alert{$\leadsto$ help to maintain
+                 modularity and  improve readability }}}
+         \vspace{1em}
+           \uncover<5->{
+         \item{using the Python/Numpy language/library with solutions
+             for improving the relatively poor performance\\
+             ~~~~~\uncover<6->{\alert{$\leadsto$ benefit from
+                 Python's ease of use}}}}
+          
+      \end{itemize}
+  \end{center}
+\end{frame}
+
+
+\end{document}
