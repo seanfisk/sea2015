@@ -1,5 +1,6 @@
 \documentclass{beamer}
-\usetheme{Boulder}
+\setbeamercolor{alerted text}{fg=magenta}
+%\usetheme{Boulder}
 %34,139,34
 %\definecolor{bgcolor}{rgb}{34/256,139/256,34/256}
 \setbeamertemplate{blocks}[rounded][shadow=true]
@@ -12,6 +13,30 @@
 
 \usepackage{tikz,tikz-qtree}
 \usepackage[utf8]{inputenc}
+
+
+% listings                                                                              
+\usepackage{fancyvrb,relsize}
+%\fvset{frame=single,framerule=.2mm,fontsize=\relscale{1.2}}
+\fvset{fontsize=\relscale{1.2}}
+\input{lst/pygments}
+
+\newcommand*\FancyVerbStartString{}
+\newcommand*\FancyVerbStopString{}
+
+\newcommand{\codepyt}[3]{%                                                              
+%  \refstepcounter{Listing}%                                                             
+%  \fvset{label=Listing~\theListing}%                                                    
+%  \fvset{gobble=#3}%                                                                    
+  \renewcommand*\FancyVerbStartString{\PY{c}{\PYZsh{}\PYZlt{}listing\PYZhy{}#2\PYZgt{}}}%                                                                                      
+  \renewcommand*\FancyVerbStopString{\PY{c}{\PYZsh{}\PYZlt{}/listing\PYZhy{}#2\PYZgt{}}}%                                                                                      
+  \input{#1}%                                                                           
+  \vspace{-1.5em}%                                                                      
+}
+
+\usepackage{float}
+\newfloat{Listing}{hbtp}{lop}
+
 
 \newcommand{\ftitle}[1]{\frametitle{#1\\\hrule}\vspace{-2em}}
 
@@ -31,26 +56,63 @@
 
   \section{Introduction: testing and pytest}
 
-  \begin{frame}
-    \ftitle{software testing}
-    \begin{description}
-      \item[MSc]{theoretical elementary particle physics}
-         \vspace{1em}
-      \uncover<1->{\item[PhD]{computational (F77) atmospheric physics}}
-    \end{description}
-    \vspace{2em}
-    \uncover<2->{
-      {\bf lessons learnt:}
+  \begin{frame}[fragile]
+
+      \ftitle{project's methodology}
+  %\begin{Listing}
+    \codepyt{lst/git_revision.py}{1}{0}                                                   
+  %\end{Listing}                         
+
+
+\end{frame}
+
+
+
+
+
+  \begin{frame}[fragile]
+    \ftitle{software testing - motivation}
+    \uncover<1->{
+      {\bf why testing a software?}
+%  \begin{Listing}
+    \codepyt{lst/test}{1}{0}
+    \label{lst:git_revision}
+%  \end{Listing}
+
        \vspace{.5em}
       \begin{itemize}
-        \uncover<3->{\item{prefer Python/NumPy to F77}}
+        \uncover<2->{\item{mistakes happend and always will}\\{\color{gray}(don't deny!)}\\}
+        \vspace{.5em}
+        \uncover<3->{\alert{$\leadsto$ guard agains them}\\}
+        \vspace{.5em}
+        \uncover<3->{\alert{$\leadsto$ raise your confidence}\\}
           \vspace{.5em}
-	\uncover<4->{\item{my research productivity can be improved!}\\}
+	\uncover<4->{\item{makes you think about desirable output}\\}
           \vspace{.5em}
-	\uncover<5->{\alert{$\leadsto$ software design does matter!}\\}
+	\uncover<5->{\alert{$\leadsto$ helps you to write a better code}\\}
+          \vspace{.5em}
+        \uncover<4->{\item{improves readability of your code}\\}
+          \vspace{.5em}
+        \uncover<5->{\alert{$\leadsto$ helps to reuse your code}\\}
+%allow for later changes??
+% dodac when testing??
       \end{itemize}
     }
+\end{frame}
+
+  \begin{frame}
+    \ftitle{software testing - types}
+   \begin{description}
+      \item[unittest]{TODO}
+         \vspace{1em}
+     \item[integration]{checking if components cooperate}
+         \vspace{1em}
+     \item[functional]{checking if code works in an environment}
+    \end{description}
+   \vspace{2.em}
+        \uncover<2->{\alert{$\leadsto$ We will concentrate on unittest}\\}
   \end{frame}
+
 
 
   \frame<-4>[label=tabelka]{
@@ -89,34 +151,6 @@
   }
 
 
-  \begin{frame}[fragile]
-    \begin{center}
-      \ftitle{ease of use (and misuse) - model users' perspective}
-      \begin{itemize}
-        \item{understandable output\\~~~~~\uncover<2->{\alert{$\leadsto$ docs, open data format}}}
-        \item<3->{easy way of providing input and ``setup'' \\  (setups are much more than ``parameters''!)\\~~~~~\uncover<4->{\alert{$\leadsto$ docs, setup/solver separation!}}}
-      \end{itemize}
-      \begin{columns}
-        \begin{column}{.2\textwidth}
-        \end{column}
-        \begin{column}{.8\textwidth}
-          \uncover<4->{
-	    \begin{itemize}\small
-	      \item{setup implementation {\bf\underline{out of tree}}\\
-	      (structuring into libraries helps!)}
-	      \item{as few constraints as possible\\
-                  (e.g. dimensionality, data types $\leadsto$ C++
-                  templates)}
-              \item{library API: flexible and documented}
-	    \end{itemize}
-          }
-        \end{column}
-      \end{columns}
-    \end{center}
-\end{frame}
-
-
-
   \frame<-5>[label=ext]{
     \ftitle{extendability - model developers' perspective}
     \begin{itemize}
@@ -134,31 +168,6 @@
   }
 
 
-
-  \section{Future plans: (my upcoming 2-year {\bf postdoc @NCAR)}}
-
-  \begin{frame}[fragile]
-    \begin{center}
-      \ftitle{project's methodology}
-      \begin{itemize}
-        \item{writing automated tests during code development\\
-            ~~~~~\uncover<2->{\alert{$\leadsto$ verify behaviors of
-                schemes during the development}}}
-          \vspace{1em}
-         \uncover<3->{
-         \item{using technics of object-oriented  programming\\}
-             ~~~~~\uncover<4->{\alert{$\leadsto$ help to maintain
-                 modularity and  improve readability }}}
-         \vspace{1em}
-           \uncover<5->{
-         \item{using the Python/Numpy language/library with solutions
-             for improving the relatively poor performance\\
-             ~~~~~\uncover<6->{\alert{$\leadsto$ benefit from
-                 Python's ease of use}}}}
-          
-      \end{itemize}
-  \end{center}
-\end{frame}
 
 
 \end{document}
