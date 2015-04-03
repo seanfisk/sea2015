@@ -1,6 +1,6 @@
 \documentclass{beamer}
 \setbeamercolor{alerted text}{fg=magenta}
-%\usetheme{Boulder}
+\usetheme{Boulder}
 %34,139,34
 %\definecolor{bgcolor}{rgb}{34/256,139/256,34/256}
 \setbeamertemplate{blocks}[rounded][shadow=true]
@@ -18,7 +18,7 @@
 % listings                                                                              
 \usepackage{fancyvrb,relsize}
 %\fvset{frame=single,framerule=.2mm,fontsize=\relscale{1.2}}
-\fvset{fontsize=\relscale{1.2}}
+\fvset{fontsize=\relscale{1.}}
 \input{lst/pygments}
 
 \newcommand*\FancyVerbStartString{}
@@ -31,8 +31,21 @@
   \renewcommand*\FancyVerbStartString{\PY{c}{\PYZsh{}\PYZlt{}listing\PYZhy{}#2\PYZgt{}}}%                                                                                      
   \renewcommand*\FancyVerbStopString{\PY{c}{\PYZsh{}\PYZlt{}/listing\PYZhy{}#2\PYZgt{}}}%                                                                                      
   \input{#1}%                                                                           
-  \vspace{-1.5em}%                                                                      
+%  \vspace{-.5em}%                                                                      
 }
+
+\newcommand{\codetxt}[4]{%                                                           
+  \refstepcounter{Listing}%                                                         
+  \fvset{label=Listing~\theListing#4}%
+  \fvset{fontsize=\relscale{.7}}                                        
+  \fvset{gobble=#3}%                                                                 
+  \renewcommand*\FancyVerbStartString{\PYZsh{}\PYZlt{}listing\PYZhy{}#2\PYZgt{}}%  
+  \renewcommand*\FancyVerbStopString{\PYZsh{}\PYZlt{}/listing\PYZhy{}#2\PYZgt{}}% 
+  \input{#1}%                                            
+  \vspace{-1.5em}%                                       
+}
+
+
 
 \usepackage{float}
 \newfloat{Listing}{hbtp}{lop}
@@ -54,20 +67,7 @@
     \maketitle
   \end{frame}
 
-  \section{Introduction: testing and pytest}
-
-  \begin{frame}[fragile]
-
-      \ftitle{project's methodology}
-  %\begin{Listing}
-    \codepyt{lst/git_revision.py}{1}{0}                                                   
-  %\end{Listing}                         
-
-
-\end{frame}
-
-
-
+  \section{Introduction: testing and py.test}
 
 
   \begin{frame}[fragile]
@@ -75,8 +75,8 @@
     \uncover<1->{
       {\bf why testing a software?}
 %  \begin{Listing}
-    \codepyt{lst/test}{1}{0}
-    \label{lst:git_revision}
+%    \codepyt{lst/test}{1}{0}
+%    \label{lst:git_revision}
 %  \end{Listing}
 
        \vspace{.5em}
@@ -85,7 +85,7 @@
         \vspace{.5em}
         \uncover<3->{\alert{$\leadsto$ guard agains them}\\}
         \vspace{.5em}
-        \uncover<3->{\alert{$\leadsto$ raise your confidence}\\}
+        \uncover<3->{\alert{$\leadsto$ raise your confidence during development}\\}
           \vspace{.5em}
 	\uncover<4->{\item{makes you think about desirable output}\\}
           \vspace{.5em}
@@ -103,17 +103,76 @@
   \begin{frame}
     \ftitle{software testing - types}
    \begin{description}
-      \item[unittest]{TODO}
+      \item[unittest]{testing isolated parts of the code}
          \vspace{1em}
      \item[integration]{checking if components cooperate}
          \vspace{1em}
      \item[functional]{checking if code works in an environment}
     \end{description}
    \vspace{2.em}
-        \uncover<2->{\alert{$\leadsto$ We will concentrate on unittest}\\}
+        \uncover<2->{\alert{$\leadsto$ We will concentrate on unittests}\\}
   \end{frame}
 
+  \begin{frame}[fragile]
+      \ftitle{unit tests and assert statement}
+   \uncover<1>{A simple example - testing division by two}
+   \only<1-5,8>{ \codepyt{lst/test_asserts}{1}{0}}
+     \only<2,3,4,5,6,8>{ \begin{itemize}
+   \item{\only<2-3>{the simplest assert statement\\
+            \codepyt{lst/test_asserts}{2}{0}}
+      \only<4-5>{the assert statement with message\\
+          \codepyt{lst/test_asserts}{3}{0}}
+      \only<6>{using Unittest built-in library\\
+            \codepyt{lst/test_asserts}{4}{0}}
+      \only<8>{using py.test\\
+            \codepyt{lst/test_asserts}{5}{0}}}
+      \end{itemize}}
+    \only<3>{\codetxt{lst/output_asserts}{1}{0}{}}
+    \only<5>{\codetxt{lst/output_asserts}{2}{0}{}}
+    \only<7>{\codetxt{lst/output_asserts}{3}{0}{}}
+    \only<9>{\codetxt{lst/output_asserts}{4}{0}{}}
+% TODO dolozyc poprawiona wersje i output!
 
+%    \codeout{lst/output_asserts.txt}
+\end{frame}
+
+  \begin{frame}
+    \ftitle{py.test}
+     \begin{itemize}
+      \item{it's easy to get started}
+         \vspace{1em}
+     \item{straightforward asserting with the assert statement}
+         \vspace{1em}
+     \item{helpful traceback and failing assertion reporting}
+         \vspace{1em}
+     \item{automatic test discovery}
+    \end{itemize}
+   \vspace{2.em}
+        \uncover<2->{\alert{ \url{http://pytest.org/latest/index.html}}}
+  \end{frame}
+
+ \section{py.test - examples}
+
+ \begin{frame}[fragile]
+      \ftitle{more about assert statement}
+   Potential temeperature
+    \only<1-3>{$$ \theta = T \left(\frac{p_0}{p} \right)^{(R_d/cp)}  $$}
+    \only<4->{\codepyt{lst/test_asserts_temp}{1}{0}}
+ 
+  LC
+ \begin{itemize}
+   \uncover<2->{\item{testing input}
+   \codepyt{lst/test_asserts_temp}{5}{0}}
+   \uncover<3->{\item{testing output}
+   \codepyt{lst/test_asserts_temp}{3}{0}}
+ \end{itemize}
+
+
+\end{frame}
+
+\section{py.test - options and...}
+
+\section{py.test - more advanced features}
 
   \frame<-4>[label=tabelka]{
     \ftitle{software design and researchers' productivity}
@@ -149,25 +208,6 @@
       {\Large \color<5->{gray}\alert<4>{researcher = user \& developer}}
     }
   }
-
-
-  \frame<-5>[label=ext]{
-    \ftitle{extendability - model developers' perspective}
-    \begin{itemize}
-      \item<1->{language with a market of trained personnel\\{\color{gray}(Python, C++, \ldots)}}
-      \vspace{1em}
-      \item<2->{separation of concerns\\{\color{gray}(cloud physicist does cloud physics, etc.)}\\
-	~~~~~\uncover<3->{\alert{$\leadsto$ structuring into libraries helps again!}} 
-      }
-      \vspace{1em}
-      \item<4->{human-readable code\\{\color{gray}(code vs. paper -- they both describe the same algorithm)}\\
-	~~~~~\uncover<5->{\alert{$\leadsto$ dimensional analysis}}\\ 
-	~~~~~\uncover<6->{\alert{$\leadsto$  ``blackboard abstractions''}} 
-      }
-    \end{itemize}
-  }
-
-
 
 
 \end{document}
